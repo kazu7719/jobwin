@@ -1,1 +1,63 @@
-カレンダー
+<main class="calendar-page">
+  <section class="calendar-panel">
+    <header class="calendar-panel__header">
+      <div>
+        <p class="calendar-panel__eyebrow">My Schedule</p>
+        <h1>習慣・タスク・プロジェクトをひとつのカレンダーで俯瞰</h1>
+        <p class="calendar-panel__lead">日々のルーティンと進行中の仕事をまとめて確認し、今日の優先事項をいつでも思い出せるようにします。</p>
+      </div>
+      <div class="calendar-panel__actions">
+        <%= link_to "今日", root_path, class: "btn" %>
+        <div class="month-switcher">
+          <%= link_to "&lt;".html_safe, root_path(month: @prev_month_param), class: "btn btn--ghost", aria: { label: "前の月" } %>
+          <span><%= @month_label %></span>
+          <%= link_to "&gt;".html_safe, root_path(month: @next_month_param), class: "btn btn--ghost", aria: { label: "次の月" } %>
+        </div>
+      </div>
+    </header>
+
+    <% weekdays = ["日", "月", "火", "水", "木", "金", "土"] %>
+
+    <div class="calendar-grid calendar-grid--head">
+      <% weekdays.each do |day| %>
+        <div class="calendar-weekday"><%= day %></div>
+      <% end %>
+    </div>
+
+    <div class="calendar-grid">
+      <% @total_cells.times do |slot| %>
+        <% cell_day = slot - @leading_blank_cells + 1 %>
+        <% if cell_day.between?(1, @days_in_month) %>
+          <% cell_classes = ["calendar-cell"] %>
+          <% if @month_date.year == @today.year && @month_date.month == @today.month && cell_day == @today.day %>
+            <% cell_classes << "calendar-cell--today" %>
+          <% end %>
+          <div class="<%= cell_classes.join(' ') %>">
+            <div class="calendar-date"><%= cell_day %></div>
+          </div>
+        <% else %>
+          <div class="calendar-cell calendar-cell--muted"></div>
+        <% end %>
+      <% end %>
+    </div>
+
+    <div class="calendar-detail">
+      <h2>今日のフォーカス</h2>
+      <p>習慣・タスク・プロジェクトを登録すると、ここから詳細を切り替えて確認できます。</p>
+      <div class="detail-actions">
+        <button type="button" class="detail-button detail-button--habit">
+          <span>習慣を確認</span>
+          <small>ルーティンとチェック状況</small>
+        </button>
+        <button type="button" class="detail-button detail-button--task">
+          <span>タスクを確認</span>
+          <small>締切と優先度を整理</small>
+        </button>
+        <button type="button" class="detail-button detail-button--project">
+          <span>プロジェクトを確認</span>
+          <small>マイルストーンと担当者</small>
+        </button>
+      </div>
+    </div>
+  </section>
+</main>
