@@ -1,0 +1,46 @@
+<main class="auth-page">
+  <section class="auth-panel">
+    <div class="auth-panel__intro">
+      <p class="calendar-panel__eyebrow">Create Account</p>
+      <h1>Jobwinをはじめる</h1>
+      <p class="calendar-panel__lead">習慣・タスク・プロジェクトを一元管理するためのアカウントを作成しましょう。必要な情報を入力するだけで準備完了です。</p>
+    </div>
+
+    <%= form_with model: @user, url: user_registration_path, class: "auth-form", local: true do |f| %>
+      <div class="form-field">
+        <%= f.label :nickname, "ニックネーム" %>
+        <%= f.text_field :nickname, placeholder: "例）山田太郎" %>
+      </div>
+
+      <div class="form-field">
+        <%= f.label :labor_id, "身分" %>
+        <%= f.collection_select(:labor_id, Labor.all, :id, :name, {}, {class:"goal-select"}) %>
+      </div>
+
+      <div class="form-field">
+        <%= f.label :goal, "目標" %>
+        <%= f.text_area :goal, placeholder: "なりたい姿や到達目標を記入してください", rows: 3 %>
+      </div>
+
+      <div class="form-field">
+        <%= f.label :email, "メールアドレス" %>
+        <%= f.email_field :email, placeholder: "you@example.com" %>
+      </div>
+
+      <div class="form-field">
+        <%= f.label :password, "パスワード" %>
+        <%= f.password_field :password, placeholder: "8文字以上" %>
+      </div>
+
+      <div class="form-field">
+        <%= f.label :password_confirmation, "パスワード（確認）" %>
+        <%= f.password_field :password_confirmation, placeholder: "同じパスワードを入力" %>
+      </div>
+
+      <div class="form-actions">
+        <%= f.submit "登録する", class: "btn" %>
+        <p class="auth-helper-text">すでにアカウントをお持ちの方は<%= link_to "こちら", new_user_session_path %>からログインしてください。</p>
+      </div>
+    <% end %>
+  </section>
+</main>

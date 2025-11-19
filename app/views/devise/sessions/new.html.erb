@@ -1,0 +1,26 @@
+<main class="auth-page">
+  <section class="auth-panel">
+    <div class="auth-panel__intro">
+      <p class="calendar-panel__eyebrow">Welcome Back</p>
+      <h1>ログインしてスケジュールを確認</h1>
+      <p class="calendar-panel__lead">登録済みのメールアドレスとパスワードでログインすると、習慣・タスク・プロジェクトをまとめて管理できます。</p>
+    </div>
+
+    <%= form_with model: @user, url: user_session_path, class: "auth-form", local: true do |f| %>
+      <div class="form-field">
+        <%= f.label :email, "メールアドレス" %>
+        <%= f.email_field :email, placeholder: "you@example.com" %>
+      </div>
+
+      <div class="form-field">
+        <%= f.label :password, "パスワード" %>
+        <%= f.password_field :password, placeholder: "••••••••" %>
+      </div>
+
+      <div class="form-actions">
+        <%= f.submit "ログイン", class: "btn" %>
+        <p class="auth-helper-text">アカウントをお持ちでない方は<%= link_to "新規登録", new_user_registration_path %>へ。</p>
+      </div>
+    <% end %>
+  </section>
+</main>

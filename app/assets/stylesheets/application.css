@@ -25,6 +25,39 @@ main {
   display: block;
 }
 
+.site-header {
+  width: min(1200px, 100%);
+  margin: 0 auto;
+  padding: 32px 24px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.site-header__brand {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.site-header__brand a {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.site-header__brand span {
+  color: var(--color-muted);
+  font-size: 0.9rem;
+}
+
+.site-header__actions {
+  display: flex;
+  gap: 12px;
+}
+
 button {
   border: none;
   cursor: pointer;
@@ -222,6 +255,70 @@ button {
   border-color: rgba(16, 185, 129, 0.3);
 }
 
+.auth-page {
+  min-height: calc(100vh - 160px);
+  padding: 48px 16px 80px;
+  display: flex;
+  justify-content: center;
+}
+
+.auth-panel {
+  width: min(720px, 100%);
+  background: var(--color-panel);
+  border-radius: var(--radius-lg);
+  padding: 48px;
+  box-shadow: var(--shadow-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-field label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.form-field input,
+.form-field textarea {
+  width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  font-size: 1rem;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.form-field textarea {
+  resize: vertical;
+}
+
+.form-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.auth-helper-text {
+  color: var(--color-muted);
+  font-size: 0.9rem;
+}
+
+.auth-helper-text a {
+  color: var(--color-task);
+  font-weight: 600;
+  text-decoration: none;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .calendar-panel {
@@ -241,5 +338,14 @@ button {
   .calendar-cell {
     min-height: 100px;
     padding: 10px;
+  }
+
+  .site-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .auth-panel {
+    padding: 32px 24px;
   }
 }
