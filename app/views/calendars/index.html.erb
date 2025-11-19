@@ -3,7 +3,7 @@
     <header class="calendar-panel__header">
       <div>
         <p class="calendar-panel__eyebrow">My Schedule</p>
-        <h1>習慣・タスク・プロジェクトをひとつのカレンダーで俯瞰</h1>
+        <h1>プロジェクト・タスク・習慣をひとつのカレンダーで俯瞰</h1>
         <p class="calendar-panel__lead">日々のルーティンと進行中の仕事をまとめて確認し、今日の優先事項をいつでも思い出せるようにします。</p>
       </div>
       <div class="calendar-panel__actions">
@@ -43,16 +43,16 @@
 
     <div class="calendar-detail">
       <h2>今日のフォーカス</h2>
-      <p>習慣・タスク・プロジェクトを登録すると、ここから詳細を切り替えて確認できます。</p>
+      <p>プロジェクト・タスク・習慣を登録すると、ここから詳細を切り替えて確認できます。</p>
       <div class="detail-actions">
-        <button type="button" class="detail-button detail-button--habit">
-          <span>習慣を登録・確認</span>
+         <button type="button" class="detail-button detail-button--project">
+          <%= link_to "プロジェクトを登録・確認",  %>
         </button>
-        <button type="button" class="detail-button detail-button--task">
+         <button type="button" class="detail-button detail-button--task">
           <span>タスクを登録・確認</span>
         </button>
-        <button type="button" class="detail-button detail-button--project">
-          <span>プロジェクトを登録・確認</span>
+        <button type="button" class="detail-button detail-button--habit">
+          <span>習慣を登録・確認</span>
         </button>
       </div>
     </div>

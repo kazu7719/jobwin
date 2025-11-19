@@ -19,7 +19,7 @@ has_many:habits
 |start_day|datetime|null: false|
 |schedule_end_day|datetime|null: false|
 |end_day|datetime|
-|memo|text|null: false|
+|memo|text|
 |user|references|null: false, foreign_key: true|
 
 ##association
