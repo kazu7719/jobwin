@@ -1,0 +1,47 @@
+<main class="calendar-page project-page">
+  <section class="calendar-panel project-panel">
+    <header class="calendar-panel__header">
+      <div>
+        <p class="calendar-panel__eyebrow">Projects</p>
+        <h1>進行中のプロジェクト一覧</h1>
+        <p class="calendar-panel__lead">プロジェクト名とスケジュールをまとめて確認し、チェックを付けて進捗を管理できます。</p>
+      </div>
+      <div class="calendar-panel__actions">
+        <%= link_to "プロジェクト新規登録", "#", class: "btn" %>
+      </div>
+    </header>
+
+    <div class="project-list" role="list">
+      <% @projects.each do |project| %>
+        <% start_label = project.start_day&.strftime('%Y/%m/%d') || '-' %>
+        <% end_label = project.schedule_end_day&.strftime('%Y/%m/%d') || '-' %>
+        <% delay_days = project.start_day.present? && project.schedule_end_day.present? ? (project.schedule_end_day.to_date - project.start_day.to_date).to_i : '-' %>
+        <% delay_label = delay_days == '-' ? '-' : "#{delay_days}日" %>
+        <article class="project-card" role="listitem">
+          <div class="project-card__header">
+            <label class="project-card__title">
+              <%= check_box_tag "project_ids[]", project.id, false, class: "project-card__check", aria: { label: "#{project.project_name} をチェック" } %>
+              <%= link_to project_path(project), class: "project-card__link" do %>
+                <span><%= project.project_name %></span>
+              <% end %>
+            </label>
+          </div>
+            <dl class="project-card__meta">
+              <div>
+                <dt>開始日</dt>
+                <dd><%= start_label %></dd>
+              </div>
+              <div>
+                <dt>予定終了日</dt>
+                <dd><%= end_label %></dd>
+              </div>
+              <div>
+                <dt>遅延日数</dt>
+                <dd><%= delay_label %></dd>
+              </div>
+            </dl>
+        </article>
+      <% end %>
+    </div>
+  </section>
+</main>
