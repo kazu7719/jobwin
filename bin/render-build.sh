@@ -1,14 +1,16 @@
 #!/usr/bin/env bash
-# exit on error（どこかで失敗したらそこで止める）
-set -o errexit
+set -o errexit  # どこかで失敗したらそこで止める
 
-# 1. 依存ライブラリをインストール
+# 1. Rubyの依存インストール
 bundle install
 
-# 2.（もし Node/Yarn 使っていたら）フロント側のビルド
-# package.json があるならコメントアウトを外して使ってOKです
+# 2. （フロントがあれば）JS/CSSのビルド
+# package.json があって yarn を使っているならコメントアウトを外す
 # yarn install
 # yarn build
 
-# 3. アセットのプリコンパイル（CSS/JS）
+# 3. アセットプリコンパイル
 bundle exec rails assets:precompile
+
+# 4. ★ここで本番DBにマイグレーションを流す★
+bundle exec rails db:migrate
