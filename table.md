@@ -28,7 +28,7 @@ has_many:project_tasks
 
 ##project_tasks
 |Column|Type|Options|
-|project_name|string|null: false|
+|project_task_name|string|null: false|
 |user|references|null: false, foreign_key: true|
 |project|references|null: false, foreign_key: true|
 

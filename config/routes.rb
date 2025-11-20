@@ -3,4 +3,7 @@ Rails.application.routes.draw do
 root to: "calendars#index"
 
 resources :users, only:[:edit, :update]
+resources :projects, only: [:index] do
+  resources :project_tasks, only:[:create]
+end
 end

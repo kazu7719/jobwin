@@ -10,7 +10,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_11_19_062358) do
+ActiveRecord::Schema[7.1].define(version: 2025_11_20_061028) do
+  create_table "project_tasks", charset: "utf8mb3", force: :cascade do |t|
+    t.string "project_task_name"
+    t.bigint "user_id", null: false
+    t.bigint "project_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["project_id"], name: "index_project_tasks_on_project_id"
+    t.index ["user_id"], name: "index_project_tasks_on_user_id"
+  end
+
+  create_table "projects", charset: "utf8mb3", force: :cascade do |t|
+    t.string "project_name"
+    t.datetime "start_day"
+    t.datetime "schedule_end_day"
+    t.datetime "end_day"
+    t.text "memo"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_projects_on_user_id"
+  end
+
   create_table "users", charset: "utf8mb3", force: :cascade do |t|
     t.string "nickname", null: false
     t.integer "labor_id", null: false
@@ -26,4 +48,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_19_062358) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "project_tasks", "projects"
+  add_foreign_key "project_tasks", "users"
+  add_foreign_key "projects", "users"
 end
