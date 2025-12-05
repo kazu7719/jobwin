@@ -1,0 +1,157 @@
+<% start_label = @project.start_day&.strftime('%Y/%m/%d') || '-' %>
+<% schedule_end_label = @project.schedule_end_day&.strftime('%Y/%m/%d') || '-' %>
+<% end_label = @project.end_day&.strftime('%Y/%m/%d') || '-' %>
+
+<main class="calendar-page project-page">
+  <section class="calendar-panel project-panel">
+    <header class="calendar-panel__header">
+      <div>
+        <p class="calendar-panel__eyebrow">Projects</p>
+        <h1><%= @project.project_name %> の詳細</h1>
+        <p class="calendar-panel__lead">スケジュールやメモ、紐づくタスクをまとめて確認し、タスクの順番をその場で並び替えできます。</p>
+      </div>
+      <div class="calendar-panel__actions">
+        <%= link_to "一覧へ戻る", projects_path, class: "btn btn--ghost" %>
+      </div>
+    </header>
+
+    <div class="project-details">
+      <div class="project-details__grid">
+        <div class="project-details__card">
+          <h3>プロジェクト情報</h3>
+          <dl class="project-card__meta">
+            <div>
+              <dt>開始日</dt>
+              <dd><%= start_label %></dd>
+            </div>
+            <div>
+              <dt>終了予定日</dt>
+              <dd><%= schedule_end_label %></dd>
+            </div>
+            <div>
+              <dt>終了日</dt>
+              <dd><%= end_label %></dd>
+            </div>
+          </dl>
+        </div>
+
+        <div class="project-details__card">
+          <h3>メモ</h3>
+          <p class="project-details__memo"><%= @project.memo.presence || "メモは登録されていません。" %></p>
+        </div>
+      </div>
+
+      <div class="project-form__tasks project-details__tasks">
+        <div class="project-form__tasks-header">
+          <div>
+            <p class="calendar-panel__eyebrow">Tasks</p>
+            <h3>タスク一覧</h3>
+            <p class="calendar-panel__lead">ドラッグ＆ドロップでタスクの順番を並び替えられます。</p>
+          </div>
+        </div>
+
+        <ul id="project-task-list" class="task-fields sortable-task-list">
+          <% @project.project_tasks.order(:created_at).each_with_index do |task, index| %>
+            <li class="task-fields__item sortable-task-list__item" draggable="true">
+              <div class="task-fields__control sortable-task-list__control">
+                <span class="sortable-task-list__handle" aria-hidden="true">☰</span>
+                <div>
+                  <p class="sortable-task-list__label">タスク <span class="sortable-task-list__index"><%= index + 1 %></span></p>
+                  <label class="sortable-task-list__checkbox">
+                    <input type="checkbox" />
+                    <span class="sortable-task-list__name"><%= task.project_task_name %></span>
+                  </label>
+                </div>
+              </div>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>
+
+  <script>
+    const initializeTaskListSorting = () => {
+      const list = document.getElementById("project-task-list");
+      if (!list || list.dataset.sortingBound) return;
+
+      list.dataset.sortingBound = "true";
+
+      const updatePositions = () => {
+        list.querySelectorAll(".sortable-task-list__item").forEach((item, index) => {
+          const indexLabel = item.querySelector(".sortable-task-list__index");
+          if (indexLabel) indexLabel.textContent = index + 1;
+        });
+      };
+
+      const getDragAfterElement = (container, y) => {
+        const draggableElements = [...container.querySelectorAll(".sortable-task-list__item:not(.is-dragging)")];
+
+        return draggableElements.reduce(
+          (closest, child) => {
+            const box = child.getBoundingClientRect();
+            const offset = y - box.top - box.height / 2;
+            if (offset < 0 && offset > closest.offset) {
+              return { offset, element: child };
+            }
+            return closest;
+          },
+          { offset: Number.NEGATIVE_INFINITY, element: null }
+        ).element;
+      };
+
+      let draggingItem = null;
+
+      list.addEventListener("dragstart", (event) => {
+        const item = event.target.closest(".sortable-task-list__item");
+        if (!item) return;
+
+        draggingItem = item;
+        item.classList.add("is-dragging");
+        if (event.dataTransfer) {
+          event.dataTransfer.effectAllowed = "move";
+          event.dataTransfer.setData("text/plain", "dragging" + Date.now());
+        }
+      });
+
+      list.addEventListener("dragover", (event) => {
+        if (!draggingItem) return;
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        const afterElement = getDragAfterElement(list, event.clientY);
+        if (!afterElement) {
+          list.appendChild(draggingItem);
+        } else {
+          list.insertBefore(draggingItem, afterElement);
+        }
+
+        if (event.dataTransfer) {
+          event.dataTransfer.dropEffect = "move";
+        }
+      });
+
+      list.addEventListener("drop", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        if (draggingItem) {
+          draggingItem.classList.remove("is-dragging");
+          draggingItem = null;
+          updatePositions();
+        }
+      });
+
+      list.addEventListener("dragend", () => {
+        if (draggingItem) {
+          draggingItem.classList.remove("is-dragging");
+          draggingItem = null;
+          updatePositions();
+        }
+      });
+    };
+
+    document.addEventListener("DOMContentLoaded", initializeTaskListSorting);
+    document.addEventListener("turbo:load", initializeTaskListSorting);
+  </script>

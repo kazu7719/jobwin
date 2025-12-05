@@ -22,7 +22,7 @@
             <label class="project-card__title">
               <%= check_box_tag "project_ids[]", project.id, false, class: "project-card__check", aria: { label: "#{project.project_name} をチェック" } %>
               <%= link_to project_path(project), class: "project-card__link" do %>
-                <span><%= project.project_name %></span>
+                <span><%= link_to project.project_name, project_path(project.id)  %></span>
               <% end %>
             </label>
           </div>

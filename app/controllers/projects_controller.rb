@@ -1,5 +1,6 @@
 class ProjectsController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_project, only: [:show]
   def index
     @projects = Project.includes(:user).order('created_at DESC')
   end
@@ -22,6 +23,10 @@ class ProjectsController < ApplicationController
     end  
   end
 
+  def show
+    
+  end
+
   private
 
   def build_default_task
@@ -30,6 +35,10 @@ class ProjectsController < ApplicationController
 
   def assign_task_users
     @project.project_tasks.each { |task| task.user ||= current_user }
+  end
+
+  def set_project
+    @project = current_user.projects.includes(:project_tasks).find(params[:id])
   end
   
   def project_params
