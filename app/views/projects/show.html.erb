@@ -13,7 +13,7 @@
       <div class="calendar-panel__actions">
         <div class="project-actions__row">
         <%= link_to "編集", edit_project_path(@project.id), class: "btn btn--ghost" %>
-        <%= button_to "削除", project_path(@project.id), data: { turbo_method: :delete }, class: "btn btn--danger" %>
+        <%= button_to "削除", project_path(@project.id), method: :delete, class: "btn btn--danger" %>
         </div>
         <%= link_to "一覧へ戻る", projects_path, class: "btn btn--ghost" %>
       </div>

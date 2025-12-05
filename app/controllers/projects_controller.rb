@@ -44,8 +44,11 @@ class ProjectsController < ApplicationController
   end
 
   def destroy
-    @project.destroy
-    redirect_to projects_path 
+    if @project.destroy
+      redirect_to projects_path
+    else
+      redirect_to project_path(@project)
+    end
   end  
 
   private
