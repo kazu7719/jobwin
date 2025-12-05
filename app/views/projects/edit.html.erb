@@ -1,0 +1,124 @@
+<% @project.project_tasks.build if @project.project_tasks.empty? %>
+
+<main class="calendar-page project-page">
+  <section class="calendar-panel project-panel">
+    <header class="calendar-panel__header">
+      <div>
+        <p class="calendar-panel__eyebrow">Projects</p>
+        <h1>プロジェクト編集</h1>
+        <p class="calendar-panel__lead">プロジェクト情報とタスクを更新し、最新の状態を共有しましょう。</p>
+      </div>
+      <div class="calendar-panel__actions">
+        <%= link_to "詳細へ戻る", project_path(@project.id), class: "btn btn--ghost" %>
+      </div>
+    </header>
+
+    <%= form_with model: @project, class: "project-form__body" do |f| %>
+      <div class="project-form__grid">
+        <div class="form-field">
+          <%= f.label :project_name, "プロジェクト名" %>
+          <%= f.text_field :project_name, required: true, class: "form-control", placeholder: "例: 新規LP制作" %>
+        </div>
+        <div class="form-field">
+          <%= f.label :start_day, "開始日" %>
+          <%= f.date_field :start_day, required: true, class: "form-control" %>
+        </div>
+        <div class="form-field">
+          <%= f.label :schedule_end_day, "終了予定日" %>
+          <%= f.date_field :schedule_end_day, required: true, class: "form-control" %>
+        </div>
+        <div class="form-field">
+          <%= f.label :end_day, "終了日" %>
+          <%= f.date_field :end_day, class: "form-control" %>
+        </div>
+        <div class="form-field form-field--full">
+          <%= f.label :memo, "メモ" %>
+          <%= f.text_area :memo, rows: 3, class: "form-control", placeholder: "プロジェクトの概要や共有事項を記載" %>
+        </div>
+      </div>
+
+      <div class="project-form__tasks">
+        <div class="project-form__tasks-header">
+          <div>
+            <p class="calendar-panel__eyebrow">Tasks</p>
+            <h3>タスクを編集</h3>
+            <p class="calendar-panel__lead">紐づくタスク名を必要な数だけ更新できます。</p>
+          </div>
+          <button type="button" class="btn btn--ghost" id="add-task-button">＋ タスクを追加</button>
+        </div>
+
+        <div id="task-fields" class="task-fields" data-index="<%= @project.project_tasks.size %>">
+          <%= f.fields_for :project_tasks do |task_fields| %>
+            <div class="task-fields__item" data-task-persisted="<%= task_fields.object.persisted? %>">
+                <div class="form-field form-field--full">
+                  <%= task_fields.label :project_task_name, "タスク名" %>
+                  <div class="task-fields__control">
+                    <%= task_fields.hidden_field :id %>
+                    <%= task_fields.hidden_field :_destroy, class: "task-destroy-flag" %>
+                    <%= task_fields.text_field :project_task_name, required: true, class: "form-control", placeholder: "例: ワイヤーフレーム作成" %>
+                    <button type="button" class="btn btn--ghost task-remove" aria-label="このタスクを削除">削除</button>
+                  </div>
+                </div>
+              </div>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="project-form__actions">
+        <%= f.submit "プロジェクトを更新", class: "btn" %>
+      </div>
+    <% end %>
+  </section>
+</main>
+
+<template id="task-template">
+  <div class="task-fields__item" data-task-persisted="false">
+    <div class="form-field form-field--full">
+      <label class="task-label">タスク名</label>
+      <div class="task-fields__control">
+        <input type="hidden" name="project[project_tasks_attributes][__INDEX__][_destroy]" class="task-destroy-flag" />
+        <input class="form-control" type="text" name="project[project_tasks_attributes][__INDEX__][project_task_name]" placeholder="例: ワイヤーフレーム作成" required="required" />
+        <button type="button" class="btn btn--ghost task-remove" aria-label="このタスクを削除">削除</button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const addButton = document.getElementById("add-task-button");
+    const taskContainer = document.getElementById("task-fields");
+    const template = document.getElementById("task-template");
+
+    if (!addButton || !taskContainer || !template) return;
+
+    const updateIndices = (element, index) => {
+      element.innerHTML = element.innerHTML.replace(/__INDEX__/g, index);
+    };
+
+    addButton.addEventListener("click", () => {
+      const index = Number(taskContainer.dataset.index) || 0;
+      const clone = template.content.cloneNode(true);
+      updateIndices(clone.firstElementChild, index);
+      taskContainer.appendChild(clone);
+      taskContainer.dataset.index = index + 1;
+    });
+
+    taskContainer.addEventListener("click", (event) => {
+      if (event.target.closest(".task-remove")) {
+        const item = event.target.closest(".task-fields__item");
+        if (!item) return;
+
+        const destroyField = item.querySelector(".task-destroy-flag");
+        const isPersisted = item.dataset.taskPersisted === "true";
+
+        if (isPersisted && destroyField) {
+          destroyField.value = "1";
+          item.style.display = "none";
+        } else if (taskContainer.children.length > 1) {
+          item.remove();
+        }
+      }
+    });
+  });
+</script>

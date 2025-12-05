@@ -1,6 +1,6 @@
 class ProjectsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_project, only: [:show]
+  before_action :set_project, only: [:show,:edit,:update,:destroy]
   def index
     @projects = Project.includes(:user).order('created_at DESC')
   end
@@ -26,6 +26,27 @@ class ProjectsController < ApplicationController
   def show
     
   end
+
+  def edit
+    build_default_task
+  end
+
+  def update
+    @project.assign_attributes(project_params)
+    assign_task_users
+    build_default_task
+
+    if @project.save
+      redirect_to projects_path
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    @project.destroy
+    redirect_to projects_path 
+  end  
 
   private
 
