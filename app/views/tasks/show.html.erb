@@ -1,0 +1,53 @@
+<% start_label = @task.start_day&.strftime('%Y/%m/%d') || '-' %>
+<% schedule_end_label = @task.schedule_end_day&.strftime('%Y/%m/%d') || '-' %>
+<% end_label = @task.end_day&.strftime('%Y/%m/%d') || '-' %>
+
+<main class="calendar-page project-page">
+  <section class="calendar-panel project-panel">
+    <header class="calendar-panel__header">
+      <div>
+        <p class="calendar-panel__eyebrow">Tasks</p>
+        <h1><%= @task.task_name %> の詳細</h1>
+        <p class="calendar-panel__lead">タスクのスケジュールやメモをまとめて確認できます。</p>
+      </div>
+      <div class="calendar-panel__actions">
+        <div class="project-actions__row">
+          <%= link_to "編集", edit_task_path(@task.id), class: "btn btn--ghost" %>
+          <%= button_to "削除", task_path(@task.id), method: :delete, class: "btn btn--danger" %>
+        </div>
+        <%= link_to "一覧へ戻る", tasks_path, class: "btn btn--ghost" %>
+      </div>
+    </header>
+
+    <div class="project-details">
+      <div class="project-details__grid">
+        <div class="project-details__card">
+          <h3>タスク情報</h3>
+          <dl class="project-card__meta">
+            <div>
+              <dt>タスク名</dt>
+              <dd><%= @task.task_name %></dd>
+            </div>
+            <div>
+              <dt>開始日</dt>
+              <dd><%= start_label %></dd>
+            </div>
+            <div>
+              <dt>終了予定日</dt>
+              <dd><%= schedule_end_label %></dd>
+            </div>
+            <div>
+              <dt>終了日</dt>
+              <dd><%= end_label %></dd>
+            </div>
+          </dl>
+        </div>
+
+        <div class="project-details__card">
+          <h3>メモ</h3>
+          <p class="project-details__memo"><%= @task.memo.presence || "メモは登録されていません。" %></p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
