@@ -1,0 +1,43 @@
+<main class="calendar-page project-page">
+  <section class="calendar-panel project-panel">
+    <header class="calendar-panel__header">
+      <div>
+        <p class="calendar-panel__eyebrow">Tasks</p>
+        <h1>タスク新規登録</h1>
+        <p class="calendar-panel__lead">タスク情報を入力し、進行管理を開始しましょう。</p>
+      </div>
+      <div class="calendar-panel__actions">
+        <%= link_to "一覧へ戻る", tasks_path, class: "btn btn--ghost" %>
+      </div>
+    </header>
+
+    <%= form_with model: @task, class: "project-form__body" do |f| %>
+      <div class="project-form__grid">
+        <div class="form-field">
+          <%= f.label :task_name, "タスク名" %>
+          <%= f.text_field :task_name, required: true, class: "form-control", placeholder: "例: 新規LP制作" %>
+        </div>
+        <div class="form-field">
+          <%= f.label :start_day, "開始日" %>
+          <%= f.date_field :start_day, required: true, class: "form-control" %>
+        </div>
+        <div class="form-field">
+          <%= f.label :schedule_end_day, "終了予定日" %>
+          <%= f.date_field :schedule_end_day, required: true, class: "form-control" %>
+        </div>
+        <div class="form-field">
+          <%= f.label :end_day, "終了日" %>
+          <%= f.date_field :end_day, class: "form-control" %>
+        </div>
+        <div class="form-field form-field--full">
+          <%= f.label :memo, "メモ" %>
+          <%= f.text_area :memo, rows: 3, class: "form-control", placeholder: "タスクの概要や共有事項を記載" %>
+        </div>
+      </div>
+
+      <div class="project-form__actions">
+        <%= f.submit "タスクを登録", class: "btn" %>
+      </div>
+    <% end %>
+  </section>
+</main>

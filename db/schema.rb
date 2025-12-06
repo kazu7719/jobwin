@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_11_20_061028) do
+ActiveRecord::Schema[7.1].define(version: 2025_12_06_005241) do
   create_table "project_tasks", charset: "utf8mb3", force: :cascade do |t|
     t.string "project_task_name"
     t.bigint "user_id", null: false
@@ -33,6 +33,18 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_20_061028) do
     t.index ["user_id"], name: "index_projects_on_user_id"
   end
 
+  create_table "tasks", charset: "utf8mb3", force: :cascade do |t|
+    t.string "task_name"
+    t.datetime "start_day"
+    t.datetime "schedule_end_day"
+    t.datetime "end_day"
+    t.text "memo"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_tasks_on_user_id"
+  end
+
   create_table "users", charset: "utf8mb3", force: :cascade do |t|
     t.string "nickname", null: false
     t.integer "labor_id", null: false
@@ -51,4 +63,5 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_20_061028) do
   add_foreign_key "project_tasks", "projects"
   add_foreign_key "project_tasks", "users"
   add_foreign_key "projects", "users"
+  add_foreign_key "tasks", "users"
 end
