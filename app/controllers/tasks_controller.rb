@@ -1,4 +1,5 @@
 class TasksController < ApplicationController
+  before_action :authenticate_user!
 
   def index
     @tasks = Task.includes(:user).order('created_at DESC')
@@ -22,5 +23,5 @@ class TasksController < ApplicationController
   def task_params
     params.require(:task).permit(:task_name, :start_day, :schedule_end_day, :end_day, :memo).merge(user_id: current_user.id)
   end
-  
+
 end

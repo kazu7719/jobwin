@@ -2,7 +2,7 @@
   <section class="calendar-panel project-panel">
     <header class="calendar-panel__header">
       <div>
-        <p class="calendar-panel__eyebrow">Projects</p>
+        <p class="calendar-panel__eyebrow">Tasks</p>
         <h1>進行中のタスク一覧</h1>
         <p class="calendar-panel__lead">タスク名とスケジュールをまとめて確認し、チェックを付けて進捗を管理できます。</p>
       </div>
@@ -15,28 +15,26 @@
       <% @tasks.each do |task| %>
         <% start_label = task.start_day&.strftime('%Y/%m/%d') || '-' %>
         <% end_label = task.schedule_end_day&.strftime('%Y/%m/%d') || '-' %>
-        <% delay_days = task.start_day.present? && task.schedule_end_day.present? ? (project.schedule_end_day.to_date - project.start_day.to_date).to_i : '-' %>
-        <% delay_label = delay_days == '-' ? '-' : "#{delay_days}日" %>
+    
         <article class="project-card" role="listitem">
           <div class="project-card__header">
             <label class="project-card__title">
-              <%= check_box_tag "task_ids[]", task.id, false, class: "project-card__check", aria: { label: "#{project.project_name} をチェック" } %>
+              <%= check_box_tag "task_ids[]", task.id, false, class: "project-card__check", aria: { label: "#{task.task_name} をチェック" } %>
               <%= link_to task_path(task), class: "project-card__link" do %>
-                <span><%= link_to task.task_name, task_path(task.id)  %></span>
+                 <span><%= link_to task.task_name, task_path(task.id) %></span>
               <% end %>
             </label>
           </div>
             <dl class="project-card__meta">
-              <div>
-                <dt>開始日</dt>
-                <dd><%= start_label %></dd>
-              </div>
-              <div>
-                <dt>予定終了日</dt>
-                <dd><%= end_label %></dd>
-              </div>
-              
-            </dl>
+            <div>
+              <dt>開始日</dt>
+              <dd><%= start_label %></dd>
+            </div>
+            <div>
+              <dt>終了予定日</dt>
+              <dd><%= end_label %></dd>
+            </div>
+          </dl>
         </article>
       <% end %>
     </div>

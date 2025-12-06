@@ -6,5 +6,5 @@ resources :users, only:[:edit, :update]
 resources :projects do
   resources :project_tasks, only:[:create]
 end
-resources :tasks, only:[:index, :new, :create]
+resources :tasks
 end
