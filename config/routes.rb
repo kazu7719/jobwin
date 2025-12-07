@@ -7,4 +7,5 @@ resources :projects do
   resources :project_tasks, only:[:create]
 end
 resources :tasks
+resources :habits
 end

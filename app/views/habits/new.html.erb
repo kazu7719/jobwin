@@ -1,0 +1,31 @@
+<main class="calendar-page project-page">
+  <section class="calendar-panel project-panel">
+    <header class="calendar-panel__header">
+      <div>
+        <p class="calendar-panel__eyebrow">Habits</p>
+        <h1>習慣新規登録</h1>
+        <p class="calendar-panel__lead">習慣情報を入力し、新しいルーティンを始めましょう。</p>
+      </div>
+      <div class="calendar-panel__actions">
+        <%= link_to "一覧へ戻る", habits_path, class: "btn btn--ghost" %>
+      </div>
+    </header>
+
+    <%= form_with model: @habit, class: "project-form__body" do |f| %>
+      <div class="project-form__grid">
+        <div class="form-field">
+          <%= f.label :habit_name, "習慣名" %>
+          <%= f.text_field :habit_name, required: true, class: "form-control", placeholder: "例: 毎朝30分読書" %>
+        </div>
+        <div class="form-field">
+          <%= f.label :start_day, "開始日" %>
+          <%= f.date_field :start_day, required: true, class: "form-control" %>
+        </div>
+      </div>
+
+      <div class="project-form__actions">
+        <%= f.submit "習慣を登録", class: "btn" %>
+      </div>
+    <% end %>
+  </section>
+</main>
