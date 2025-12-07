@@ -50,7 +50,8 @@ class HabitsController < ApplicationController
   end
 
   def set_item
-    @habit = current_user.habits.find(params[:id])
+    @habit = current_user.habits.find_by(id: params[:id])
+    redirect_to(root_path) unless @habit
   end
 
   

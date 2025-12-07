@@ -63,7 +63,8 @@ class ProjectsController < ApplicationController
   end
 
   def set_project
-    @project = current_user.projects.includes(:project_tasks).find(params[:id])
+    @project = current_user.projects.includes(:project_tasks).find_by(id: params[:id])
+    redirect_to(root_path) unless @project
   end
   
   def project_params
