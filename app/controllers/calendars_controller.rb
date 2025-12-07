@@ -21,19 +21,19 @@ class CalendarsController < ApplicationController
     month_range = @month_date.beginning_of_month..@month_date.end_of_month
 
     current_user.projects.find_each do |project|
-      add_span_entry(month_range, project.start_day, project.schedule_end_day, :projects, project.project_name)
+      add_span_entry(month_range, project.start_day, project.schedule_end_day, :projects, project.project_name, project.id)
     end
 
     Task.where(user_id: current_user.id).find_each do |task|
-      add_span_entry(month_range, task.start_day, task.schedule_end_day, :tasks, task.task_name)
+      add_span_entry(month_range, task.start_day, task.schedule_end_day, :tasks, task.task_name, task.id)
     end
 
     Habit.where(user_id: current_user.id).find_each do |habit|
-      add_span_entry(month_range, habit.start_day, month_range.last, :habits, habit.habit_name)
+      add_span_entry(month_range, habit.start_day, month_range.last, :habits, habit.habit_name, habit.id)
     end
   end
 
-  def add_span_entry(month_range, start_day, end_day, type_key, label)
+  def add_span_entry(month_range, start_day, end_day, type_key, label, identifier)
     return if start_day.blank? || end_day.blank?
 
     range_start = [start_day.to_date, month_range.first].max
@@ -41,17 +41,17 @@ class CalendarsController < ApplicationController
     return if range_end < range_start
 
     (range_start..range_end).each do |date|
-      @calendar_entries[date][type_key] << label
+      @calendar_entries[date][type_key] << { id: identifier, name: label }
     end
   end
 
-  def add_single_entry(month_range, day, type_key, label)
+  def add_single_entry(month_range, day, type_key, label, identifier)
     return if day.blank?
 
     date = day.to_date
     return unless month_range.cover?(date)
 
-    @calendar_entries[date][type_key] << label
+    @calendar_entries[date][type_key] << { id: identifier, name: label }
   end
 
   def requested_month

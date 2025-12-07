@@ -515,6 +515,17 @@ button {
   height: 18px;
 }
 
+.project-card--checked {
+  background: #f8fafc;
+  opacity: 0.85;
+}
+
+.project-card--checked .project-card__title span,
+.project-card--checked .project-card__link {
+  text-decoration: line-through;
+  color: var(--color-muted);
+}
+
 .project-card__meta {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

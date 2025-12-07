@@ -12,6 +12,10 @@ export default class extends Controller {
 
   connect() {
     this.selectedCell = null
+    this.checkedProjects = this.loadCheckedIds("project")
+    this.checkedTasks = this.loadCheckedIds("task")
+
+    this.removeCheckedGridItems()
     this.selectToday()
   }
 
@@ -43,8 +47,8 @@ export default class extends Controller {
   }
 
   updateDetail(cell) {
-    const projects = this.parseDataset(cell.dataset.projects)
-    const tasks = this.parseDataset(cell.dataset.tasks)
+    const projects = this.filterCheckedItems(this.parseDataset(cell.dataset.projects), "project")
+    const tasks = this.filterCheckedItems(this.parseDataset(cell.dataset.tasks), "task")
     const habits = this.parseDataset(cell.dataset.habits)
     const hasAnyEntries = projects.length || tasks.length || habits.length
 
@@ -62,7 +66,7 @@ export default class extends Controller {
     items.forEach((item) => {
       const li = document.createElement("li")
       li.className = `detail-list__item detail-list__item--${modifier}`
-      li.textContent = item
+      li.textContent = item.name
       element.appendChild(li)
     })
   }
@@ -78,5 +82,40 @@ export default class extends Controller {
 
   toggleEmptyMessage(isEmpty) {
     this.emptyMessageTarget.hidden = !isEmpty
+  }
+
+  loadCheckedIds(type) {
+    const key = type === "project" ? "checkedProjects" : "checkedTasks"
+
+    try {
+      const raw = localStorage.getItem(key)
+      return raw ? JSON.parse(raw) : []
+    } catch (error) {
+      console.warn("チェック状態の読み込みに失敗しました", error)
+      return []
+    }
+  }
+
+  filterCheckedItems(items, type) {
+    const ignoredIds = new Set(type === "project" ? this.checkedProjects : this.checkedTasks)
+    return items.filter((item) => !ignoredIds.has(String(item.id)))
+  }
+
+  removeCheckedGridItems() {
+    const projectIds = new Set(this.checkedProjects)
+    const taskIds = new Set(this.checkedTasks)
+
+    this.cellTargets.forEach((cell) => {
+      const items = cell.querySelectorAll("[data-calendar-item-type]")
+
+      items.forEach((item) => {
+        const type = item.dataset.calendarItemType
+        const id = item.dataset.calendarItemId
+
+        if ((type === "project" && projectIds.has(id)) || (type === "task" && taskIds.has(id))) {
+          item.remove()
+        }
+      })
+    })
   }
 }

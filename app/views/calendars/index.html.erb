@@ -49,14 +49,14 @@
             <div class="calendar-date"><%= cell_day %></div>
             <% if daily_entries.values.any?(&:present?) %>
               <ul class="calendar-items">
-                <% daily_entries[:projects].each do |project_name| %>
-                  <li class="calendar-items__item calendar-items__item--project"><%= project_name %></li>
+                <% daily_entries[:projects].each do |project| %>
+                  <li class="calendar-items__item calendar-items__item--project" data-calendar-item-type="project" data-calendar-item-id="<%= project[:id] %>"><%= project[:name] %></li>
                 <% end %>
-                <% daily_entries[:tasks].each do |task_name| %>
-                  <li class="calendar-items__item calendar-items__item--task"><%= task_name %></li>
+               <% daily_entries[:tasks].each do |task| %>
+                  <li class="calendar-items__item calendar-items__item--task" data-calendar-item-type="task" data-calendar-item-id="<%= task[:id] %>"><%= task[:name] %></li>
                 <% end %>
-                <% daily_entries[:habits].each do |habit_name| %>
-                  <li class="calendar-items__item calendar-items__item--habit"><%= habit_name %></li>
+               <% daily_entries[:habits].each do |habit| %>
+                  <li class="calendar-items__item calendar-items__item--habit" data-calendar-item-type="habit" data-calendar-item-id="<%= habit[:id] %>"><%= habit[:name] %></li>
                 <% end %>
               </ul>
             <% end %>

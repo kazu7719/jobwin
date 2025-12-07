@@ -11,7 +11,7 @@
       </div>
     </header>
 
-    <div class="project-list" role="list">
+   <div class="project-list" role="list" data-controller="checklist">
       <% @tasks.each do |task| %>
         <% start_label = task.start_day&.strftime('%Y/%m/%d') || '-' %>
         <% end_label = task.schedule_end_day&.strftime('%Y/%m/%d') || '-' %>
@@ -19,7 +19,7 @@
         <article class="project-card" role="listitem">
           <div class="project-card__header">
             <label class="project-card__title">
-              <%= check_box_tag "task_ids[]", task.id, false, class: "project-card__check", aria: { label: "#{task.task_name} をチェック" } %>
+                  <%= check_box_tag "task_ids[]", task.id, false, class: "project-card__check", aria: { label: "#{task.task_name} をチェック" }, data: { checklist_target: "checkbox", checklist_type: "task", action: "checklist#toggle" } %>
               <%= link_to task_path(task), class: "project-card__link" do %>
                  <span><%= link_to task.task_name, task_path(task.id) %></span>
               <% end %>
