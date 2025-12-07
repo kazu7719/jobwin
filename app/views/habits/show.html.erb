@@ -1,0 +1,38 @@
+<% start_label = @habit.start_day&.strftime('%Y/%m/%d') || '-' %>
+
+<main class="calendar-page project-page">
+  <section class="calendar-panel project-panel">
+    <header class="calendar-panel__header">
+      <div>
+        <p class="calendar-panel__eyebrow">Habits</p>
+        <h1><%= @habit.habit_name %> の詳細</h1>
+        <p class="calendar-panel__lead">習慣の基本情報を確認できます。</p>
+      </div>
+      <div class="calendar-panel__actions">
+        <div class="project-actions__row">
+          <%= link_to "編集", edit_habit_path(@habit.id), class: "btn btn--ghost" %>
+          <%= button_to "削除", habit_path(@habit.id), method: :delete, class: "btn btn--danger" %>
+        </div>
+        <%= link_to "一覧へ戻る", habits_path, class: "btn btn--ghost" %>
+      </div>
+    </header>
+
+    <div class="project-details">
+      <div class="project-details__grid">
+        <div class="project-details__card">
+          <h3>習慣情報</h3>
+          <dl class="project-card__meta">
+            <div>
+              <dt>習慣名</dt>
+              <dd><%= @habit.habit_name %></dd>
+            </div>
+            <div>
+              <dt>開始日</dt>
+              <dd><%= start_label %></dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
