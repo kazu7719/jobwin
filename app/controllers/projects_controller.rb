@@ -1,8 +1,9 @@
 class ProjectsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_project, only: [:show,:edit,:update,:destroy]
+
   def index
-    @projects = Project.includes(:user).order('created_at DESC')
+    @projects = current_user.projects.includes(:project_tasks).order('created_at DESC')
   end
 
   def new
@@ -68,5 +69,7 @@ class ProjectsController < ApplicationController
   def project_params
     params.require(:project).permit(:project_name, :start_day, :schedule_end_day, :end_day, :memo,project_tasks_attributes: [:id, :project_task_name, :_destroy]).merge(user_id: current_user.id)
   end
+
+ 
   
 end

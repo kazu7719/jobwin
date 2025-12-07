@@ -1,13 +1,14 @@
 class HabitsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_item, only: [:show,:edit,:update,:destroy]
+  
 
   def index
-    @habits = Habit.includes(:user).order('created_at DESC')
+    @habits = current_user.habits.order('created_at DESC')
   end
 
   def new
-    @habit = Habit.new
+    @habit = current_user.habits.build
   end
 
   def create
@@ -49,7 +50,9 @@ class HabitsController < ApplicationController
   end
 
   def set_item
-    @habit = Habit.find(params[:id])
+    @habit = current_user.habits.find(params[:id])
   end
+
+  
 
 end

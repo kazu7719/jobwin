@@ -2,12 +2,13 @@ class TasksController < ApplicationController
   before_action :authenticate_user!
   before_action :set_item, only: [:show,:edit,:update,:destroy]
 
+
   def index
-    @tasks = Task.includes(:user).order('created_at DESC')
+    @tasks = current_user.tasks.order('created_at DESC')
   end
 
   def new
-    @task = Task.new
+    @task = current_user.tasks.build
   end
 
   def create
@@ -48,7 +49,8 @@ class TasksController < ApplicationController
   end
 
   def set_item
-    @task = Task.find(params[:id])
+    @task = current_user.tasks.find(params[:id])
   end
+
 
 end
