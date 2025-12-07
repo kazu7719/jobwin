@@ -82,12 +82,12 @@
 </template>
 
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
+  const initializeTaskForm = () => {
     const addButton = document.getElementById("add-task-button");
     const taskContainer = document.getElementById("task-fields");
     const template = document.getElementById("task-template");
 
-    if (!addButton || !taskContainer || !template) return;
+    if (!addButton || !taskContainer || !template || taskContainer.dataset.initialized === "true") return;
 
     const updateIndices = (element, index) => {
       element.innerHTML = element.innerHTML.replace(/__INDEX__/g, index);
@@ -109,5 +109,10 @@
         }
       }
     });
-  });
+  
+    taskContainer.dataset.initialized = "true";
+  };
+
+  document.addEventListener("DOMContentLoaded", initializeTaskForm);
+  document.addEventListener("turbo:load", initializeTaskForm);
 </script>
