@@ -32,8 +32,23 @@
           <% if @month_date.year == @today.year && @month_date.month == @today.month && cell_day == @today.day %>
             <% cell_classes << "calendar-cell--today" %>
           <% end %>
+          <% cell_date = @month_date + (cell_day - 1).days %>
+          <% daily_entries = @calendar_entries[cell_date] %>
           <div class="<%= cell_classes.join(' ') %>">
             <div class="calendar-date"><%= cell_day %></div>
+            <% if daily_entries.values.any?(&:present?) %>
+              <ul class="calendar-items">
+                <% daily_entries[:projects].each do |project_name| %>
+                  <li class="calendar-items__item calendar-items__item--project"><%= project_name %></li>
+                <% end %>
+                <% daily_entries[:tasks].each do |task_name| %>
+                  <li class="calendar-items__item calendar-items__item--task"><%= task_name %></li>
+                <% end %>
+                <% daily_entries[:habits].each do |habit_name| %>
+                  <li class="calendar-items__item calendar-items__item--habit"><%= habit_name %></li>
+                <% end %>
+              </ul>
+            <% end %>
           </div>
         <% else %>
           <div class="calendar-cell calendar-cell--muted"></div>

@@ -210,6 +210,38 @@ button {
   background: var(--color-project);
 }
 
+.calendar-items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 160px;
+  overflow-y: auto;
+}
+
+.calendar-items__item {
+  padding: 6px 8px;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  background: #f8fafc;
+  border-left: 4px solid var(--color-border);
+}
+
+.calendar-items__item--project {
+  border-left-color: var(--color-project);
+}
+
+.calendar-items__item--task {
+  border-left-color: var(--color-task);
+}
+
+.calendar-items__item--habit {
+  border-left-color: var(--color-habit);
+}
+
+
 /* Detail section */
 .calendar-detail h2 {
   margin: 0 0 8px;
