@@ -1,4 +1,4 @@
-<main class="calendar-page">
+<main class="calendar-page" data-controller="calendar">
   <section class="calendar-panel">
     <header class="calendar-panel__header">
       <div>
@@ -24,7 +24,7 @@
       <% end %>
     </div>
 
-    <div class="calendar-grid">
+     <div class="calendar-grid" data-calendar-target="grid">
       <% @total_cells.times do |slot| %>
         <% cell_day = slot - @leading_blank_cells + 1 %>
         <% if cell_day.between?(1, @days_in_month) %>
@@ -34,7 +34,18 @@
           <% end %>
           <% cell_date = @month_date + (cell_day - 1).days %>
           <% daily_entries = @calendar_entries[cell_date] %>
-          <div class="<%= cell_classes.join(' ') %>">
+          <div
+            class="<%= cell_classes.join(' ') %>"
+            data-calendar-target="cell"
+            data-action="click->calendar#select keydown.enter->calendar#select keydown.space->calendar#select"
+            data-date-label="<%= cell_date.strftime('%Y年%-m月%-d日') %>"
+            data-projects='<%= daily_entries[:projects].to_json %>'
+            data-tasks='<%= daily_entries[:tasks].to_json %>'
+            data-habits='<%= daily_entries[:habits].to_json %>'
+            tabindex="0"
+            role="button"
+            aria-label="<%= cell_date.strftime('%Y年%-m月%-d日の予定') %>"
+          >
             <div class="calendar-date"><%= cell_day %></div>
             <% if daily_entries.values.any?(&:present?) %>
               <ul class="calendar-items">
@@ -57,8 +68,30 @@
     </div>
 
     <div class="calendar-detail">
-      <h2>今日のフォーカス</h2>
-      <p>プロジェクト・タスク・習慣を登録すると、ここから詳細を切り替えて確認できます。</p>
+      <h2 data-calendar-target="detailHeading">予定の確認</h2>
+      <p>日付を選択すると、登録済みのプロジェクト・タスク・習慣をここに表示します。</p>
+
+      <div class="detail-summary">
+        <div class="detail-summary__date" data-calendar-target="detailDate">日付を選択してください</div>
+        <p class="detail-summary__empty" data-calendar-target="emptyMessage">登録されている予定はありません。</p>
+      </div>
+
+      <div class="detail-columns">
+        <div>
+          <h3 class="detail-columns__title">プロジェクト</h3>
+          <ul class="detail-list" data-calendar-target="projectList"></ul>
+        </div>
+        <div>
+          <h3 class="detail-columns__title">タスク</h3>
+          <ul class="detail-list" data-calendar-target="taskList"></ul>
+        </div>
+        <div>
+          <h3 class="detail-columns__title">習慣</h3>
+          <ul class="detail-list" data-calendar-target="habitList"></ul>
+        </div>
+      </div>
+
+
       <div class="detail-actions">
          <button type="button" class="detail-button detail-button--project">
           <%= link_to "プロジェクトを登録・確認", projects_path %>
