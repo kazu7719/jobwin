@@ -29,7 +29,7 @@ class CalendarsController < ApplicationController
     end
 
     Habit.where(user_id: current_user.id).find_each do |habit|
-      add_single_entry(month_range, habit.start_day, :habits, habit.habit_name)
+      add_span_entry(month_range, habit.start_day, month_range.last, :habits, habit.habit_name)
     end
   end
 
