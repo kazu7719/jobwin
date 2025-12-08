@@ -9,7 +9,7 @@
     <%= form_with model: @user, url: user_registration_path, class: "auth-form", local: true do |f| %>
       <div class="form-field">
         <%= f.label :nickname, "ニックネーム" %>
-        <%= f.text_field :nickname, placeholder: "例）山田太郎" %>
+        <%= f.text_field :nickname, placeholder: "例）山田太郎 6文字以内" %>
       </div>
 
       <div class="form-field">
@@ -29,7 +29,7 @@
 
       <div class="form-field">
         <%= f.label :password, "パスワード" %>
-        <%= f.password_field :password, placeholder: "8文字以上" %>
+        <%= f.password_field :password, placeholder: "6文字以上" %>
       </div>
 
       <div class="form-field">

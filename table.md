@@ -40,7 +40,6 @@ has_many:project_tasks
 |schedule_end_day|datetime|null: false|
 |end_day|datetime|
 |user|references|null: false, foreign_key: true|
-|project|references|null: false, foreign_key: true|
 
 ##association
 belongs_to:user
@@ -49,6 +48,7 @@ belongs_to:user
 ##habits
 |Column|Type|Options|
 |habit_name|string|null:false|
+|start_day|datetime|null: false|
 |user|references|null: false, foreign_key: true|
 
 ##association
