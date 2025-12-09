@@ -40,10 +40,13 @@ https://jobwin.onrender.com
 <h1>実装した機能についての画像やGIFおよびその説明</h1>
 
 <h1>データベース設計</h1>
+
 [![Image from Gyazo](https://i.gyazo.com/5cf62017fd2614d577370fc8d9af2146.png)](https://gyazo.com/5cf62017fd2614d577370fc8d9af2146)
 
 <h1>画面遷移図</h1>
+
 [![Image from Gyazo](https://i.gyazo.com/fa76aa3088c753b0366f275abb7b805f.png)](https://gyazo.com/fa76aa3088c753b0366f275abb7b805f)
+
 
 <h1>開発環境</h1>
 <h2>言語<h2>
@@ -85,8 +88,9 @@ https://jobwin.onrender.com
 <br>→現状は Project と ProjectTask を通常のCRUDで管理しているが、FormObject を導入することで
 コントローラの責務分離・保守性・拡張性が向上する可能性があるため、今後の設計改善の候補として検討する。</br>
 
-<h1>制作時間<h1>
-<br>約30時間</br>
+
+<h1>制作時間</h1>
+約30時間
 
 
 
