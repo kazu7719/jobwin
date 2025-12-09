@@ -724,3 +724,8 @@ button {
   margin: 0;
   color: var(--color-muted);
 }
+
+.sortable-task-list__name.is-complete {
+  text-decoration: line-through;
+  color: var(--color-muted);
+}

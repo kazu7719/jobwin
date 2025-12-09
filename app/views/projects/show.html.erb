@@ -54,16 +54,16 @@
           </div>
         </div>
 
-        <ul id="project-task-list" class="task-fields sortable-task-list">
-          <% @project.project_tasks.order(:created_at).each_with_index do |task, index| %>
-            <li class="task-fields__item sortable-task-list__item" draggable="true">
+       <ul id="project-task-list" class="task-fields sortable-task-list" data-project-id="<%= @project.id %>">
+          <% @project.project_tasks.each_with_index do |task, index| %>
+            <li class="task-fields__item sortable-task-list__item" draggable="true" data-task-id="<%= task.id %>">
               <div class="task-fields__control sortable-task-list__control">
                 <span class="sortable-task-list__handle" aria-hidden="true">☰</span>
                 <div>
                   <p class="sortable-task-list__label">タスク <span class="sortable-task-list__index"><%= index + 1 %></span></p>
                   <label class="sortable-task-list__checkbox">
-                    <input type="checkbox" />
-                    <span class="sortable-task-list__name"><%= task.project_task_name %></span>
+                     <input type="checkbox" <%= "checked" if task.completed? %> />
+                    <span class="sortable-task-list__name <%= 'is-complete' if task.completed? %>"><%= task.project_task_name %></span>
                   </label>
                 </div>
               </div>
@@ -78,7 +78,9 @@
   <script>
     const initializeTaskListSorting = () => {
       const list = document.getElementById("project-task-list");
-      if (!list || list.dataset.sortingBound) return;
+      const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+      const projectId = list?.dataset.projectId;
+      if (!list || list.dataset.sortingBound || !projectId) return;
 
       list.dataset.sortingBound = "true";
 
@@ -88,6 +90,42 @@
           if (indexLabel) indexLabel.textContent = index + 1;
         });
       };
+
+      const persistPositions = () => {
+        const taskIds = Array.from(list.querySelectorAll(".sortable-task-list__item")).map((item) => item.dataset.taskId);
+        if (!taskIds.length || !csrfToken) return;
+
+        fetch(`/projects/${projectId}/project_tasks/sort`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-Token": csrfToken,
+            Accept: "application/json",
+          },
+          body: JSON.stringify({ project_task_ids: taskIds }),
+        }).catch((error) => console.error("タスク順序の保存に失敗しました", error));
+      };
+
+      const persistCompletion = (taskId, completed, nameElement) => {
+        if (!csrfToken) return;
+
+        fetch(`/projects/${projectId}/project_tasks/${taskId}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-Token": csrfToken,
+            Accept: "application/json",
+          },
+          body: JSON.stringify({ project_task: { completed } }),
+        })
+          .then(() => {
+            if (nameElement) {
+              nameElement.classList.toggle("is-complete", completed);
+            }
+          })
+          .catch((error) => console.error("タスク状態の保存に失敗しました", error));
+      };
+
 
       const getDragAfterElement = (container, y) => {
         const draggableElements = [...container.querySelectorAll(".sortable-task-list__item:not(.is-dragging)")];
@@ -144,6 +182,7 @@
           draggingItem.classList.remove("is-dragging");
           draggingItem = null;
           updatePositions();
+          persistPositions();
         }
       });
 
@@ -152,7 +191,19 @@
           draggingItem.classList.remove("is-dragging");
           draggingItem = null;
           updatePositions();
+          persistPositions();
         }
+      });
+
+      list.addEventListener("change", (event) => {
+        const checkbox = event.target.closest("input[type='checkbox']");
+        const item = event.target.closest(".sortable-task-list__item");
+
+        if (!checkbox || !item) return;
+
+        const taskId = item.dataset.taskId;
+        const nameElement = item.querySelector(".sortable-task-list__name");
+        persistCompletion(taskId, checkbox.checked, nameElement);
       });
     };
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_12_06_230924) do
+ActiveRecord::Schema[7.1].define(version: 2025_12_27_120000) do
   create_table "habits", charset: "utf8mb3", force: :cascade do |t|
     t.string "habit_name"
     t.datetime "start_day"
@@ -26,6 +26,9 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_06_230924) do
     t.bigint "project_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "completed", default: false, null: false
+    t.integer "position", default: 0, null: false
+    t.index ["project_id", "position"], name: "index_project_tasks_on_project_id_and_position"
     t.index ["project_id"], name: "index_project_tasks_on_project_id"
     t.index ["user_id"], name: "index_project_tasks_on_user_id"
   end
