@@ -8,8 +8,8 @@ Jobwin
 https://jobwin.onrender.com
 
 <h1>テスト用アカウント</h1>
-・メールアドレス :kazu@icloud.com
-・パスワード :kazu0308
+<br>・メールアドレス :kazu@icloud.com</br>
+<br>・パスワード :kazu0308</br>
 
 <h1>利用方法</h1>
 <h2>プロジェクト作成</h2>
@@ -49,8 +49,8 @@ https://jobwin.onrender.com
 
 
 <h1>開発環境</h1>
-<h2>言語<h2>
-<br>・Ruby</br>
+<h2>言語</h2>
+<br>・ruby</br>
 <br>・HTML</br>
 <br>・CSS</br>
 <br>・Javascript</br>
