@@ -39,22 +39,25 @@
               <% habit_name = habit.respond_to?(:habit_name) ? habit.habit_name : (habit.respond_to?(:name) ? habit.name : "習慣") %>
               <% start_date = habit.start_day&.to_date %>
               <% day_span = start_date.present? ? [(today - start_date).to_i + 1, 0].max : 0 %>
-              <% detail_path = respond_to?(:habit_path) ? habit_path(habit) : "#" %>
+              <% habit_checks_by_date = habit.habit_checks.index_by(&:check_date) %>
+              <% checked_count = habit.habit_checks.select { |check| check.completed? && check.check_date <= today }.size %>
+              <% percentage = day_span.positive? ? ((checked_count.to_f / day_span) * 100).round : 0 %>
+              <% progress_text = day_span.positive? ? "#{checked_count} / #{day_span}日 (#{percentage}%)" : "開始日を設定してください" %>
 
-              <article class="habit-row" role="row" data-controller="habit-progress" data-habit-progress-total-days-value="<%= [day_span, 0].max %>" style="grid-template-columns: <%= grid_template %>; min-width: <%= min_width %>px;">
+             <article class="habit-row" role="row" data-controller="habit-progress" data-habit-progress-total-days-value="<%= [day_span, 0].max %>" data-habit-progress-update-url-value="<%= habit_habit_checks_path(habit) %>" style="grid-template-columns: <%= grid_template %>; min-width: <%= min_width %>px;">
                 <div class="habit-row__title" role="rowheader">
                   <div class="habit-row__name">
                     <%= link_to habit_name, habit_path(habit.id), class: "project-card__link" %>
                   </div>
                   <div class="habit-row__progress" data-habit-progress-target="progress" aria-live="polite">
-                    <%= day_span.positive? ? "0 / #{day_span}日 (0%)" : "開始日を設定してください" %>
+                    <%= progress_text %>
                   </div>
                 </div>
 
                 <% date_headers.each do |date| %>
                   <% if start_date.present? && date >= start_date %>
                     <label class="habit-row__cell" role="cell">
-                      <%= check_box_tag "habit_checks[#{habit.object_id}][]", date, false, data: { action: "change->habit-progress#recalculate", habit_progress_target: "checkbox" } %>
+                      <%= check_box_tag "habit_checks[#{habit.object_id}][]", date, habit_checks_by_date[date]&.completed?, data: { action: "change->habit-progress#toggle", habit_progress_target: "checkbox" } %>
                     </label>
                   <% else %>
                     <div class="habit-row__cell habit-row__cell--muted" role="cell" aria-hidden="true"></div>

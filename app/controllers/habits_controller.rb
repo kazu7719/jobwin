@@ -4,7 +4,7 @@ class HabitsController < ApplicationController
   
 
   def index
-    @habits = current_user.habits.order('created_at DESC')
+    @habits = current_user.habits.includes(:habit_checks).order('created_at DESC')
   end
 
   def new

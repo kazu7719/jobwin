@@ -9,5 +9,8 @@ resources :projects do
   end
 end
 resources :tasks
-resources :habits
+resources :habits do
+  resource :habit_checks, only: [:update]
+end
+
 end
