@@ -38,6 +38,26 @@ https://jobwin.onrender.com
 それを解消するために、一つのカレンダーで3つを一元管理できるようなアプリケーションを作成することにした。
 
 <h1>実装した機能についての画像やGIFおよびその説明</h1>
+<br>①カレンダー上の日付をクリックすると下部にプロジェクト・タスク・習慣の一覧が表示される機能の動画</br>
+
+[![Image from Gyazo](https://i.gyazo.com/838a95791a4e06ea25e17aff3d145d9e.gif)](https://gyazo.com/838a95791a4e06ea25e17aff3d145d9e)
+
+<br>②プロジェクト新規登録内で紐付くタスクを複数登録出来る機能の動画</br>
+
+[![Image from Gyazo](https://i.gyazo.com/594754e7027d42b0bafadf1d162076f8.gif)](https://gyazo.com/594754e7027d42b0bafadf1d162076f8)
+
+<br>③プロジェクト詳細画面で紐付くタスクの並び替えとチェック機能の動画</br>
+
+[![Image from Gyazo](https://i.gyazo.com/e56a094a3dbc0a2b843d195e7aaac14e.gif)](https://gyazo.com/e56a094a3dbc0a2b843d195e7aaac14e)
+
+<br>④タスク一覧画面の画像</br>
+
+[![Image from Gyazo](https://i.gyazo.com/47c35e7975947ca43563f1fd618e80d8.png)](https://gyazo.com/47c35e7975947ca43563f1fd618e80d8)
+
+<br>⑤習慣一覧画面の画像</br>
+
+[![Image from Gyazo](https://i.gyazo.com/78c9c0ec5b4f860e2d9b3b6fcf1dd077.png)](https://gyazo.com/78c9c0ec5b4f860e2d9b3b6fcf1dd077)
+
 
 <h1>データベース設計</h1>
 
