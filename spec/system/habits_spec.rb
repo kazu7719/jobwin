@@ -326,4 +326,76 @@ RSpec.describe '習慣管理', type: :system do
       end
     end
   end
+
+  describe 'E:習慣チェックの保存' do
+    let(:owner) { create(:user) }
+    let(:other_user) { create(:user) }
+    let!(:habit1) { create(:habit, user: owner, habit_name: '習慣1', start_day: Date.current - 1.day) }
+    let!(:habit2) { create(:habit, user: other_user, habit_name: '習慣2') }
+
+    context '習慣チェックできる時' do
+      it 'ログインしたユーザーは自分が登録した習慣のチェックが出来、保存ができる' do
+        sign_in(owner)
+
+        # ## 一覧ページに移動する
+        if page.has_link?('習慣を登録・確認', href: habits_path)
+          click_link '習慣を登録・確認', href: habits_path
+        else
+          visit habits_path
+        end
+        expect(page).to have_current_path(habits_path)
+
+        date_string = Date.current.to_s
+        total_days = (Date.current - habit1.start_day.to_date).to_i + 1
+
+        # ## カレンダー上の習慣チェックを行う
+        habit_row = find('article.habit-row', text: habit1.habit_name)
+        progress = habit_row.find('[data-habit-progress-target="progress"]')
+        expect(progress).to have_text("0 / #{total_days}日")
+
+        expect do
+          habit_row.find("input[type='checkbox'][value='#{date_string}']").click
+          expect(progress).to have_text("1 / #{total_days}日")
+        end.to change { habit1.habit_checks.reload.count }.by(1)
+
+        # ## トップページに戻る
+        visit root_path
+        expect(page).to have_current_path(root_path)
+
+        # ## 一覧ページに移動する
+        if page.has_link?('習慣を登録・確認', href: habits_path)
+          click_link '習慣を登録・確認', href: habits_path
+        else
+          visit habits_path
+        end
+        expect(page).to have_current_path(habits_path)
+
+        # ## 先ほどチェックしたものが残っているか確認する
+        habit_row = find('article.habit-row', text: habit1.habit_name)
+        expect(habit_row.find("input[type='checkbox'][value='#{date_string}']")).to be_checked
+
+        # ## 進捗率とチェックした日付の合計が変わっていることを確認する
+        expect(habit_row.find('[data-habit-progress-target="progress"]')).to have_text("1 / #{total_days}日")
+      end
+    end
+
+    context '習慣チェックできない時' do
+      it 'ログインしたユーザーは自分以外が登録した習慣のチェックができない' do
+        sign_in(owner)
+
+        visit habit_path(habit2)
+        expect(page).to have_current_path(root_path)
+      end
+
+      it 'ログインしていない状態で習慣一覧ページに遷移できない' do
+        # ## トップページに移動する
+        visit root_path
+        expect(page).to have_current_path(root_path)
+
+        # ## 一覧ページへのボタンを押すとログイン画面に遷移する
+        click_link '習慣を登録・確認', href: habits_path
+        expect(page).to have_current_path(new_user_session_path)
+      end
+    end
+  end
 end
