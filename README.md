@@ -8,6 +8,8 @@ Jobwin
 https://jobwin.onrender.com
 
 <h1>テスト用アカウント</h1>
+<br>・Basic認証ID :kazu86</br>
+<br>・Basic認証パスワード :7719</br>
 <br>・メールアドレス :kazu@icloud.com</br>
 <br>・パスワード :kazu0308</br>
 
